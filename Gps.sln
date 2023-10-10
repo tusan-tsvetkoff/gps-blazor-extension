@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BBF0D9A3-E475-469E-A604-AF6EC74F6E58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gps.Client", "src\Gps.Client\Gps.Client.csproj", "{2E5E6103-58E4-4A6D-8687-8139775AED62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpsComponent", "src\GpsComponent\GpsComponent.csproj", "{FE053D44-231C-4AB6-B784-BE297A02748D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E5E6103-58E4-4A6D-8687-8139775AED62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5E6103-58E4-4A6D-8687-8139775AED62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5E6103-58E4-4A6D-8687-8139775AED62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5E6103-58E4-4A6D-8687-8139775AED62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE053D44-231C-4AB6-B784-BE297A02748D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE053D44-231C-4AB6-B784-BE297A02748D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE053D44-231C-4AB6-B784-BE297A02748D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE053D44-231C-4AB6-B784-BE297A02748D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E5E6103-58E4-4A6D-8687-8139775AED62} = {BBF0D9A3-E475-469E-A604-AF6EC74F6E58}
+		{FE053D44-231C-4AB6-B784-BE297A02748D} = {BBF0D9A3-E475-469E-A604-AF6EC74F6E58}
+	EndGlobalSection
+EndGlobal
