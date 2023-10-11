@@ -5,6 +5,18 @@
 <input type="number" @bind-value="Longitude" />
 <button class="btn btn-primary" @onclick="AddMarker">Add Marker</button>
 
+@foreach (var marker in Markers)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@marker.Name</h5>
+            <p class="card-text">Latitude: @marker.Latitude</p>
+            <p class="card-text">Longitude: @marker.Longitude</p>
+            <button class="btn btn-danger" @onclick="() => RemoveMarker(marker)">Remove</button>
+        </div>
+    </div>
+}
+
 
 @code {
     private List<MarkerModel>? Markers { get; set; }
@@ -18,7 +30,19 @@
 
     private void AddMarker()
     {
-        Console.WriteLine($"Adding marker at {Latitude}, {Longitude}");
-        Markers.Add(MarkerModel.Create("Empty", Latitude, Longitude));
+        var marker = MarkerModel.Create("Empty", Latitude, Longitude);
+        Markers?.Add(marker);
+        ClearLatLng();
+    }
+
+    private void RemoveMarker(MarkerModel marker)
+    {
+        Markers?.Remove(marker);
+    }
+
+    private void ClearLatLng()
+    {
+        Latitude = 0;
+        Longitude = 0;
     }
 }

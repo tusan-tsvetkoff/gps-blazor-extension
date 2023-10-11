@@ -1,5 +1,4 @@
 using GpsComponent.Models;
-
 using Microsoft.AspNetCore.Components;
 
 namespace GpsComponent;
@@ -8,27 +7,34 @@ public partial class LeafletMap : ComponentBase
 {
     private bool _isInitialized = false;
     protected const string MapId = "map";
-    private MarkerModel _lastAddedMarker = MarkerModel.Create(string.Empty, 0, 0);
-    private List<MarkerModel> _markers = new();
+    private List<MarkerModel>? _previousMarkers = new();
 
     [Parameter]
     public List<MarkerModel>? Markers { get; set; }
     [Parameter]
     public EventCallback<List<MarkerModel>> MarkersChanged { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        _isInitialized = true;
-    }
-
     protected override async Task OnParametersSetAsync()
     {
-        if(!_isInitialized)
+        if (!_isInitialized || Markers is null)
         {
             return;
         }
-        _lastAddedMarker = Markers?.LastOrDefault();
-        await AddMarkerAsync();
+
+        if (Markers.Any(m => !m.IsAdded))
+        {
+            await AddMarkerAsync(Markers.FirstOrDefault(m => !m.IsAdded)!);
+        }
+
+        var removedMarkers = _previousMarkers.Except(Markers).ToList();
+        if (removedMarkers.Any())
+        {
+            foreach (var marker in removedMarkers)
+            {
+                await RemoveMarkerAsync(marker);
+            }
+        }
+        _previousMarkers = new List<MarkerModel>(Markers);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -36,11 +42,26 @@ public partial class LeafletMap : ComponentBase
         if (firstRender)
         {
             await JsInterop.InitializeMapAsync(MapId);
+            _isInitialized = true;
         }
     }
 
-    public async Task AddMarkerAsync()
+    internal async Task AddMarkerAsync(MarkerModel marker)
     {
-        await JsInterop.AddMarkerAsync(_lastAddedMarker.Latitude, _lastAddedMarker.Longitude);
+        if (marker is null)
+        {
+            return;
+        }
+        await JsInterop.AddMarkerAsync(marker.Latitude, marker.Longitude);
+        marker.SetAdded();
+    }
+
+    internal async Task RemoveMarkerAsync(MarkerModel marker)
+    {
+        if (marker is null)
+        {
+            return;
+        }
+        await JsInterop.RemoveMarkerAsync(marker.Latitude, marker.Longitude);
     }
 }

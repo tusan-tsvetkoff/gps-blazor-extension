@@ -2,7 +2,7 @@ using Microsoft.JSInterop;
 
 namespace GpsComponent;
 
-public class JsInterop : IAsyncDisposable
+internal class JsInterop : IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
@@ -12,16 +12,22 @@ public class JsInterop : IAsyncDisposable
             "import", "./_content/GpsComponent/leafletMap.js").AsTask());
     }
 
-    public async Task InitializeMapAsync(string mapId)
+    internal async Task InitializeMapAsync(string mapId)
     {
         var module = await _moduleTask.Value;
         await module.InvokeVoidAsync("initMap", mapId);
     }
 
-    public async Task AddMarkerAsync(double lat, double lang)
+    internal async Task AddMarkerAsync(double lat, double lang)
     {
         var module = await _moduleTask.Value;
         await module.InvokeVoidAsync("addMarker", lat, lang);
+    }
+
+    internal async Task RemoveMarkerAsync(double lat, double lang)
+    {
+        var module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("deleteMarker", lat, lang);
     }
 
     public async ValueTask DisposeAsync()
