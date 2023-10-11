@@ -1,46 +1,24 @@
 @page "/"
 
-<LeafletMap @ref="_lfMap" Latitude="@Latitude" Longitude="@Longitude" OnMarkerAdded="HandleMarkerAdded" />
-<input type="text" @bind-value="@Latitude" />
-<input type="text" @bind-value="@Longitude" />
+<LeafletMap @bind-Markers="Markers" />
+<input type="number" @bind-value="Latitude" />
+<input type="number" @bind-value="Longitude" />
 <button class="btn btn-primary" @onclick="AddMarker">Add Marker</button>
 
-@*create a table of markers*@
-@if (_markers.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Latitude</th>
-                <th>Longitude</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var marker in _markers)
-            {
-                <tr>
-                    <td>@marker.Latitude</td>
-                    <td>@marker.Longitude</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
 
 @code {
-    LeafletMap? _lfMap;
-    private List<MarkerModel> _markers = new List<MarkerModel>();
+    private List<MarkerModel>? Markers { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
-    private async Task AddMarker()
+    protected override void OnInitialized()
     {
-        if (_lfMap is not null) await _lfMap.AddMarker();
+        Markers = new List<MarkerModel>();
     }
 
-    private void HandleMarkerAdded(MarkerModel marker)
+    private void AddMarker()
     {
-        _markers.Add(marker);
-        StateHasChanged();
+        Console.WriteLine($"Adding marker at {Latitude}, {Longitude}");
+        Markers.Add(MarkerModel.Create("Empty", Latitude, Longitude));
     }
 }
