@@ -30,6 +30,12 @@ internal class JsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("deleteMarker", lat, lang);
     }
 
+    internal async Task SetMarkerIconAsync(double lat, double lang, string iconName)
+    {
+        var module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("setMarkerIcon", lat, lang, iconName);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_moduleTask.IsValueCreated)
@@ -37,5 +43,11 @@ internal class JsInterop : IAsyncDisposable
             var module = await _moduleTask.Value;
             await module.DisposeAsync();
         }
+    }
+
+    internal async Task FitAllMarkersInViewAsync()
+    {
+        var module = await _moduleTask.Value;
+        await module.InvokeVoidAsync("fitAllMarkersInView");
     }
 }

@@ -1,4 +1,5 @@
 using GpsComponent.Models;
+
 using Microsoft.AspNetCore.Components;
 
 namespace GpsComponent;
@@ -29,10 +30,7 @@ public partial class LeafletMap : ComponentBase
         var removedMarkers = _previousMarkers.Except(Markers).ToList();
         if (removedMarkers.Any())
         {
-            foreach (var marker in removedMarkers)
-            {
-                await RemoveMarkerAsync(marker);
-            }
+            removedMarkers.ForEach(async x => await RemoveMarkerAsync(x));
         }
         _previousMarkers = new List<MarkerModel>(Markers);
     }
@@ -54,6 +52,20 @@ public partial class LeafletMap : ComponentBase
         }
         await JsInterop.AddMarkerAsync(marker.Latitude, marker.Longitude);
         marker.SetAdded();
+    }
+
+    internal async Task SetMarkerIcon(MarkerModel marker, string iconName)
+    {
+        if (marker is null)
+        {
+            return;
+        }
+        await JsInterop.SetMarkerIconAsync(marker.Latitude, marker.Longitude, iconName);
+    }
+
+    internal async Task FitAllMarkersInViewAsync()
+    {
+        await JsInterop.FitAllMarkersInViewAsync();
     }
 
     internal async Task RemoveMarkerAsync(MarkerModel marker)

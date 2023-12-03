@@ -5,20 +5,29 @@
 <input type="number" @bind-value="Longitude" />
 <button class="btn btn-primary" @onclick="AddMarker">Add Marker</button>
 
-@foreach (var marker in Markers)
+@if (Markers?.Count > 0)
 {
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">@marker.Name</h5>
-            <p class="card-text">Latitude: @marker.Latitude</p>
-            <p class="card-text">Longitude: @marker.Longitude</p>
-            <button class="btn btn-danger" @onclick="() => RemoveMarker(marker)">Remove</button>
+    <h2>Markers</h2>
+    foreach (var marker in Markers)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@marker.Name</h5>
+                <p class="card-text">Latitude: @marker.Latitude</p>
+                <p class="card-text">Longitude: @marker.Longitude</p>
+                <button class="btn btn-danger" @onclick="() => RemoveMarker(marker)">Remove</button>
+                <button class="btn btn-primary" @onclick="() => ChangeIcon(marker)">Change Icon</button>
+            </div>
         </div>
-    </div>
+    }
+}
+else
+{
+    <h2>No Markers</h2>
 }
 
-
 @code {
+    private List<string> Icons { get; init; } = MaIcons.GetIcons().ToList();
     private List<MarkerModel>? Markers { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
@@ -31,6 +40,10 @@
     private void AddMarker()
     {
         var marker = MarkerModel.Create("Empty", Latitude, Longitude);
+        if (Markers!.Contains(marker))
+        {
+            return;
+        }
         Markers?.Add(marker);
         ClearLatLng();
     }
@@ -38,6 +51,11 @@
     private void RemoveMarker(MarkerModel marker)
     {
         Markers?.Remove(marker);
+    }
+
+    private void ChangeIcon(MarkerModel marker, string icon)
+    {
+        marker.SetIcon();
     }
 
     private void ClearLatLng()
